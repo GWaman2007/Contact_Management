@@ -44,8 +44,6 @@ Contacts-Store/
 ├── static/
 │   ├── js/                 # Client-side JavaScript (script.js, login.js, Register.js)
 │   └── style/              # Custom stylesheets (style.css, login_.css, Register.css)
-├── seed_demo.py            # Demo database seeder script
-├── test_api.py             # Automated unit test suite
 └── requirements.txt        # Python package dependencies
 ```
 
@@ -55,8 +53,8 @@ Contacts-Store/
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/your-username/Contacts-Store.git
-cd Contacts-Store
+git clone https://github.com/GWaman2007/Contact_Management.git
+cd Contact_Management
 ```
 
 ### 2. Install Dependencies
@@ -64,13 +62,7 @@ cd Contacts-Store
 pip install -r requirements.txt
 ```
 
-### 3. Seed Demo Data (Optional)
-```bash
-python seed_demo.py
-```
-*Creates a test user (`alex@example.com` / `password123`) and sample contacts (including a hidden contact with code `OP77`).*
-
-### 4. Run Application Server
+### 3. Run Application Server
 ```bash
 python app.py
 ```
@@ -96,16 +88,6 @@ Open **[http://127.0.0.1:5000](http://127.0.0.1:5000)** in your browser.
 | `GET`  | `/search` | Search contacts | Bearer Token | `q` *(Search query)*, `code` *(Secret code)* |
 | `PUT`  | `/update/<c_id>` | Update existing contact | Bearer Token | JSON body with updated fields |
 | `DELETE` | `/delete/<c_id>` | Delete contact by ID | Bearer Token | Path parameter `c_id` |
-
----
-
-## 🧪 Running Unit Tests
-
-Run the automated test suite to verify endpoints and security logic:
-
-```bash
-python test_api.py
-```
 
 ---
 
