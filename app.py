@@ -65,10 +65,19 @@ def create_app(config_class=Config):
     def trigger_500():
         abort(500)
 
+    # Helper to check if request expects HTML response
+    def wants_html_response():
+        if request.path.startswith('/api/') or request.is_json:
+            return False
+        accept = request.headers.get('Accept', '')
+        return 'text/html' in accept or not accept or '*/*' in accept
+
     # ==================== ERROR HANDLERS ====================
     @app.errorhandler(404)
     def handle_404_error(error):
-        """Custom REST 404 JSON Error Response."""
+        """Custom 404 Error Response (HTML page for web browsers, JSON for REST API)."""
+        if wants_html_response():
+            return render_template('404.html'), 404
         return jsonify({
             "status": 404,
             "error": "Not Found",
@@ -77,7 +86,9 @@ def create_app(config_class=Config):
 
     @app.errorhandler(500)
     def handle_500_error(error):
-        """Custom REST 500 JSON Error Response."""
+        """Custom 500 Error Response (HTML page for web browsers, JSON for REST API)."""
+        if wants_html_response():
+            return render_template('500.html'), 500
         return jsonify({
             "status": 500,
             "error": "Internal Server Error",
