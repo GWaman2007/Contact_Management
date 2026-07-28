@@ -1,0 +1,4 @@
+/.venv/
+seed_demo.py
+test_api.py
+/.idea/
