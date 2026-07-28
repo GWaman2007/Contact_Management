@@ -1,59 +1,28 @@
-import os
-import uuid
-from flask import Blueprint, request, jsonify, current_app, send_from_directory
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from werkzeug.utils import secure_filename
 from extensions import db
 from models import Contact
 
 contact_bp = Blueprint('contacts', __name__)
 
-def allowed_file(filename):
-    """Check if uploaded file has an allowed image extension."""
-    if '.' not in filename:
-        return False
-    ext = filename.rsplit('.', 1)[1].lower()
-    return ext in current_app.config['ALLOWED_EXTENSIONS']
-
-def handle_photo_upload(req):
-    """Extract and save uploaded photo file if present."""
-    if 'photo_file' in req.files:
-        file = req.files['photo_file']
-    elif 'photo' in req.files:
-        file = req.files['photo']
-    else:
-        file = None
-
-    if file and file.filename != '':
-        if allowed_file(file.filename):
-            ext = file.filename.rsplit('.', 1)[1].lower()
-            unique_filename = f"{uuid.uuid4().hex}_{secure_filename(file.filename)}"
-            os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
-            save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], unique_filename)
-            file.save(save_path)
-            return unique_filename
-    return None
-
-
-# Helper decorator to allow optional or required JWT authentication
 @contact_bp.route('/create', methods=['POST'])
 @contact_bp.route('/api/contacts/create', methods=['POST'])
 @jwt_required()
 def create_contact():
     """
     Endpoint to create a new contact.
-    Accepts JSON or multipart/form-data.
-    Fields: name, ph_no, email, company_name, hide_code, photo_file (file upload or string)
+    Fields: name, ph_no, email, company_name, relation_profession, image_url, hide_code
     """
     user_id = int(get_jwt_identity())
 
-    # Get data from JSON or form fields
     data = request.form.to_dict() if request.form else (request.get_json(silent=True) or {})
 
     name = data.get('name', '').strip()
     ph_no = data.get('ph_no', '').strip() or data.get('ph_number', '').strip() or data.get('phone', '').strip()
     email = data.get('email', '').strip()
     company_name = data.get('company_name', '').strip() or data.get('company', '').strip()
+    relation_profession = data.get('relation_profession', '').strip() or data.get('relation', '').strip() or data.get('profession', '').strip()
+    image_url = data.get('image_url', '').strip() or data.get('img_url', '').strip() or data.get('profile_image_url', '').strip()
     hide_code = data.get('hide_code', '').strip() or data.get('code', '').strip()
 
     if not name or not ph_no:
@@ -63,17 +32,14 @@ def create_contact():
             "message": "Name and Ph No. are required fields."
         }), 400
 
-    # Handle photo upload or photo string
-    uploaded_photo = handle_photo_upload(request)
-    photo_file = uploaded_photo or data.get('photo_file', '')
-
     contact = Contact(
         user_id=user_id,
         name=name,
         ph_no=ph_no,
         email=email,
         company_name=company_name,
-        photo_file=photo_file,
+        relation_profession=relation_profession,
+        image_url=image_url,
         hide_code=hide_code if hide_code else None
     )
 
@@ -175,7 +141,8 @@ def search_contacts():
             (Contact.name.ilike(search_filter)) |
             (Contact.ph_no.ilike(search_filter)) |
             (Contact.email.ilike(search_filter)) |
-            (Contact.company_name.ilike(search_filter))
+            (Contact.company_name.ilike(search_filter)) |
+            (Contact.relation_profession.ilike(search_filter))
         )
 
     results = query.order_by(Contact.name.asc()).all()
@@ -195,7 +162,6 @@ def search_contacts():
 def update_contact(c_id):
     """
     Endpoint to update an existing contact by c_id.
-    Accepts JSON or multipart form data.
     """
     user_id = int(get_jwt_identity())
     contact = Contact.query.filter_by(c_id=c_id, user_id=user_id).first()
@@ -219,15 +185,20 @@ def update_contact(c_id):
         contact.email = data['email'].strip()
     if 'company_name' in data:
         contact.company_name = data['company_name'].strip()
+    if 'relation_profession' in data:
+        contact.relation_profession = data['relation_profession'].strip()
+    elif 'relation' in data:
+        contact.relation_profession = data['relation'].strip()
+    elif 'profession' in data:
+        contact.relation_profession = data['profession'].strip()
+    if 'image_url' in data:
+        contact.image_url = data['image_url'].strip()
+    elif 'img_url' in data:
+        contact.image_url = data['img_url'].strip()
+    elif 'profile_image_url' in data:
+        contact.image_url = data['profile_image_url'].strip()
     if 'hide_code' in data:
         contact.hide_code = data['hide_code'].strip() if data['hide_code'].strip() else None
-
-    # Handle optional photo update
-    uploaded_photo = handle_photo_upload(request)
-    if uploaded_photo:
-        contact.photo_file = uploaded_photo
-    elif 'photo_file' in data:
-        contact.photo_file = data['photo_file'].strip()
 
     db.session.commit()
 
@@ -262,37 +233,3 @@ def delete_contact(c_id):
         "status": 200,
         "message": f"Contact with c_id {c_id} deleted successfully."
     }), 200
-
-
-@contact_bp.route('/uploads/<filename>', methods=['GET'])
-@jwt_required()
-def serve_upload(filename):
-    """
-    Secure endpoint to serve uploaded contact photo.
-    Requires JWT authentication and verifies that the file belongs to a contact owned by the user.
-    If the contact is hidden, also requires valid hide_code.
-    """
-    user_id = int(get_jwt_identity())
-    given_code = request.args.get('code', '').strip() or request.args.get('hide_code', '').strip()
-
-    # Find contact owned by current user matching photo_file
-    contact = Contact.query.filter_by(user_id=user_id, photo_file=filename).first()
-
-    if not contact:
-        return jsonify({
-            "status": 403,
-            "error": "Forbidden",
-            "message": "Access denied. Photo not found or does not belong to your account."
-        }), 403
-
-    # Check if contact is hidden
-    if contact.hide_code and contact.hide_code.strip():
-        if given_code != contact.hide_code:
-            return jsonify({
-                "status": 403,
-                "error": "Forbidden",
-                "message": "This photo belongs to a hidden contact. Provide the correct hide_code to access."
-            }), 403
-
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
-

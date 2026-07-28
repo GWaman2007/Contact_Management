@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from flask import Flask, jsonify, send_from_directory, abort
+from flask import Flask, jsonify, send_from_directory, abort, render_template
 from config import Config
 from extensions import db, bcrypt, jwt
 from routes.auth_routes import auth_bp
@@ -24,9 +24,22 @@ def create_app(config_class=Config):
     # Ensure Upload Folder exists
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-    # Base Root Endpoint
+    # Frontend Page Routes
     @app.route('/', methods=['GET'])
-    def index():
+    def home_page():
+        return render_template('index.html')
+
+    @app.route('/login', methods=['GET'])
+    def login_page():
+        return render_template('login_.html')
+
+    @app.route('/register', methods=['GET'])
+    def register_page():
+        return render_template('Register.html')
+
+    # Base Root Endpoint
+    @app.route('/api', methods=['GET'])
+    def api_info():
         return jsonify({
             "status": 200,
             "message": "Welcome to Contacts Store REST API",

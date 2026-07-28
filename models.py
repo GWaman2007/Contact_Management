@@ -40,7 +40,8 @@ class Contact(db.Model):
     ph_no = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), nullable=True)
     company_name = db.Column(db.String(120), nullable=True)
-    photo_file = db.Column(db.String(255), nullable=True)
+    relation_profession = db.Column(db.String(120), nullable=True)
+    image_url = db.Column(db.String(500), nullable=True)
     hide_code = db.Column(db.String(50), nullable=True, index=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
@@ -53,7 +54,8 @@ class Contact(db.Model):
             "ph_no": self.ph_no,
             "email": self.email or "",
             "company_name": self.company_name or "",
-            "photo_file": self.photo_file or "",
+            "relation_profession": self.relation_profession or "",
+            "image_url": self.image_url or "",
             "is_hidden": bool(self.hide_code and self.hide_code.strip()),
             "created_at": self.created_at.isoformat() if self.created_at else None
         }

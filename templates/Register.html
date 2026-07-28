@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename ='style/Register.css') }}">
+</head>
+<body>
+    <div id="contain">
+        <form>
+        <h1>WELCOME</h1>
+        <p id="text">Register to get started</p>
+        <div>
+            <input type="text" placeholder="Username" id="name" class="entry" required>
+        </div>
+        <div>
+            <input type="email" placeholder="Email Address" id="email" class="entry" required>
+        </div>
+        <div>
+            <input type="password" placeholder="Password" id="password" class="entry" required>
+        </div>
+
+        <div>
+            <input type="password" placeholder="Confirm Password" id="Repassword" class="entry" required>
+        </div>
+
+        <div id="show">
+        <input type="checkbox" id="showButton">
+        <p style="display:inline-block;">Show password</p>
+        </div>
+        <div>
+            <button id="reg">Register</button>
+        </div>
+
+        <div id="last">
+            <p>Already have an account? <a href="{{ url_for('login_page') }}">Login</a></p>
+        </div>
+        </form>
+        
+    </div>
+    
+</body>
+
+<script src="{{ url_for('static', filename = 'js/Register.js') }}"></script>
+</html>

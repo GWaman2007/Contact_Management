@@ -1,0 +1,131 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+body {
+    background: linear-gradient(
+        to bottom right,
+        #2563eb 0%,
+        #6d93e8 35%,
+        #f5f3ee 100%
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+#contain {
+    background-color: white;
+    width: 100%;
+    max-width: 440px;
+    padding: 35px 25px;
+    text-align: center;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+form h1 {
+    margin-top: 0;
+    font-size: 40px;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+#text {
+    margin-top: 8px;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #64748b;
+}
+
+.entry {
+    width: 100%;
+    max-width: 340px;
+    height: 42px;
+    margin-top: 14px;
+    padding: 8px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.entry:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+#show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #475569;
+}
+
+#show input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+#reg {
+    width: 100%;
+    max-width: 340px;
+    height: 42px;
+    margin-top: 25px;
+    border-radius: 8px;
+    border: none;
+    background-color: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#reg:hover {
+    background-color: #1d4ed8;
+}
+
+#reg:active {
+    transform: scale(0.99);
+}
+
+#last {
+    margin-top: 22px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+#last a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+#last a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 480px) {
+    #contain {
+        padding: 25px 18px;
+    }
+    form h1 {
+        font-size: 32px;
+    }
+    #text {
+        font-size: 16px;
+    }
+}

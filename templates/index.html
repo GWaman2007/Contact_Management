@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename ='style/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <div id="title_bar">
+            <div id="logo">
+                <i class="bi bi-person-lines-fill fs-3 text-primary"></i>
+            </div>
+            <div>
+                <h1>Contact Management</h1>
+                <p id="contactCount">Contacts (0)</p>
+            </div>
+            <div id="profile">
+                <span id="userName">User</span>
+                <button id="logoutBtn" class="btn btn-outline-danger btn-sm ms-2">Logout</button>
+            </div>
+        </div>
+        
+        <hr>
+        <p>Manage all your contacts in one place</p>
+        
+        <div class="search-bar d-flex flex-wrap gap-2 align-items-center">
+            <div class="search-box flex-grow-1">
+                <input
+                    type="text"
+                    placeholder="Search your contacts..."
+                    id="data">
+
+                <button id="search" class="icon-btn">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+
+            <div class="hide-code-box">
+                <input
+                    type="text"
+                    placeholder="Enter Secret Code (Optional)..."
+                    id="hideCodeInput"
+                    class="form-control form-control-sm"
+                    style="max-width: 220px;"
+                >
+            </div>
+
+            <button id="openBtn">
+                + Add Contact
+            </button>
+        </div>
+
+        <hr>
+    </header>
+
+    <main>
+        <div class="mt-4">
+            <div id="cardcontainer">
+                <!-- Contact Cards Rendered Here via JS -->
+            </div>
+        </div>
+
+        <!-- Add/Edit Contact Modal -->
+        <div id="modal">
+            <div id="box">
+                <form id="contactForm">
+                    <h2 id="modalTitle">Add Contact</h2>
+                    <hr>
+
+                    <div class="lab">
+                        <label for="name" id="namelab" class="text">Name *</label><br>
+                        <input type="text" id="name" class="lab1" required>
+                    </div>
+
+                    <div id="maillab" class="lab">
+                        <label for="mail" id="mlab" class="text">Email</label><br>
+                        <input type="email" id="mail" class="lab1">
+                    </div>
+
+                    <div id="phonelab" class="lab">
+                        <label for="phone" id="plab" class="text">Phone Number *</label><br>
+                        <input type="tel" id="phone" class="lab1" required>
+                    </div>
+
+                    <div class="lab">
+                        <label for="company" class="text">Company (Optional)</label><br>
+                        <input type="text" id="company" class="lab1">
+                    </div>
+
+                    <div class="lab">
+                        <label for="relation" class="text">Relation / Profession (Optional)</label><br>
+                        <input type="text" id="relation" class="lab1" placeholder="Friend, Doctor, Teacher...">
+                    </div>
+
+                    <div class="lab">
+                        <label for="photoUrl" class="text">Profile Image URL (Optional)</label><br>
+                        <input type="url" id="photoUrl" class="lab1" placeholder="https://example.com/photo.jpg">
+                    </div>
+
+                    <div class="lab">
+                        <label for="hideCode" class="text">Secret Hide Code (Optional)</label><br>
+                        <input type="text" id="hideCode" class="lab1" placeholder="Enter code to hide contact">
+                    </div>
+
+                    <div id="But">
+                        <button id="log" type="submit" class="button">Add</button>
+                        <button id="closeBtn" type="button" class="button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Contact Modal -->
+        <div id="viewModal">
+            <div id="viewBox">
+                <span id="closeView">&times;</span>
+                <div id="viewAvatar"></div>
+                <h2 id="viewName"></h2>
+                <hr>
+                <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                <p><strong>Phone:</strong> <span id="viewPhone"></span></p>
+                <p><strong>Company:</strong> <span id="viewCompany"></span></p>
+                <p><strong>Relation / Profession:</strong> <span id="viewRelation"></span></p>
+                <p id="viewHiddenBadge" style="display:none;" class="text-warning"><i class="bi bi-lock-fill"></i> Hidden Contact</p>
+            </div>
+        </div>
+    </main>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename = 'js/script.js') }}"></script>
+
+</html>
