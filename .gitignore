@@ -1,4 +1,26 @@
-/.venv/
-seed_demo.py
-test_api.py
-/.idea/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+routes/__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+
+# IDE & Editor folders
+.idea/
+.vscode/
+
+# SQLite Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploaded User Files
+uploads/*
+!uploads/.gitkeep
+
+# OS generated files
+.DS_Store
+Thumbs.db
