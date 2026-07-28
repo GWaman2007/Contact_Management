@@ -14,7 +14,7 @@ Includes full CRUD operations, JWT authentication, user ownership isolation, and
 - 🖼️ **Profile Images & Professions**: Store contact details including Name, Phone Number, Email, Company, Relation / Profession, and Profile Image URL.
 - 📱 **Responsive Frontend**: Clean, responsive UI with alphabetical grouping, profile avatars, live search, and modal forms.
 - 🛡️ **Resource Ownership & Security**: Endpoints strictly enforce user-level authorization checks.
-- ⚠️ **Structured REST Error Handling**: Custom JSON responses for `404 Not Found`, `500 Internal Error`, `401 Unauthorized`, and `403 Forbidden`.
+- ⚠️ **Custom Error Handling Pages**: Renders custom `404 Page Not Found` and `500 Server Error` HTML templates for browser navigation, and structured JSON responses for API requests.
 
 ---
 
@@ -40,10 +40,12 @@ Contacts-Store/
 ├── templates/
 │   ├── index.html          # Main Dashboard page
 │   ├── login_.html         # Login page
-│   └── Register.html       # Registration page
+│   ├── Register.html       # Registration page
+│   ├── 404.html            # Custom 404 Not Found error template
+│   └── 500.html            # Custom 500 Server Error template
 ├── static/
 │   ├── js/                 # Client-side JavaScript (script.js, login.js, Register.js)
-│   └── style/              # Custom stylesheets (style.css, login_.css, Register.css)
+│   └── style/              # Custom stylesheets (style.css, login_.css, Register.css, error.css)
 └── requirements.txt        # Python package dependencies
 ```
 
