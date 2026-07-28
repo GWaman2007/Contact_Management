@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from flask import Flask, jsonify, send_from_directory, abort, render_template
+from flask import Flask, request, jsonify, send_from_directory, abort, render_template
 from config import Config
 from extensions import db, bcrypt, jwt
 from routes.auth_routes import auth_bp
